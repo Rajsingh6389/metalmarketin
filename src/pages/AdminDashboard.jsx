@@ -15,6 +15,7 @@ export default function AdminDashboard() {
     console.log(oRes.data);
     
   };
+  
 
   useEffect(() => { load(); }, []);
 

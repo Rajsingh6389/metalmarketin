@@ -10,6 +10,7 @@ export default function Checkout() {
 
   // Structured address fields
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState(""); // ✅ Added phone field
   const [street, setStreet] = useState("");
   const [city, setCity] = useState("");
   const [pincode, setPincode] = useState("");
@@ -23,8 +24,11 @@ export default function Checkout() {
 
     // Validate COD address
     if (orderType === "COD") {
-      if (!name || !street || !city || !state || !pincode) {
+      if (!name || !phone || !street || !city || !state || !pincode) {
         return toast.error("Please fill all delivery address fields");
+      }
+      if (!/^[6-9]\d{9}$/.test(phone)) {
+        return toast.error("Please enter a valid 10-digit phone number");
       }
     }
 
@@ -36,9 +40,10 @@ export default function Checkout() {
         quantity: c.quantity
       }));
 
-      const fullAddress = orderType === "COD"
-        ? `${name}, ${street}, ${city}, ${state} - ${pincode}`
-        : null;
+      const fullAddress =
+        orderType === "COD"
+          ? `${name}, ${phone}, ${street}, ${city}, ${state} - ${pincode}`
+          : null;
 
       const payload = {
         userId: user.id,
@@ -86,6 +91,17 @@ export default function Checkout() {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Your Name"
+                className="w-full p-3 bg-gray-800 rounded-lg"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-400 mb-1">Phone Number</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={e => setPhone(e.target.value)}
+                placeholder="10-digit mobile number"
+                maxLength={10}
                 className="w-full p-3 bg-gray-800 rounded-lg"
               />
             </div>
@@ -138,10 +154,11 @@ export default function Checkout() {
         <div className="flex justify-between items-center mt-6">
           <div>
             <p className="text-gray-400">Total</p>
-            {
-              orderType === "COD" ? <p className="text-2xl font-bold">₹{total+50}</p> : <p className="text-2xl font-bold">₹{total}</p>
-}
-            
+            {orderType === "COD" ? (
+              <p className="text-2xl font-bold">₹{total + 50}</p>
+            ) : (
+              <p className="text-2xl font-bold">₹{total}</p>
+            )}
           </div>
           <button
             onClick={handlePlaceOrder}
