@@ -13,8 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProductDetails from "./pages/ProductDetails";
 import Footer from "./components/Footer";
 import AboutShop from "./components/AboutShop";
-import AddedToCart from "../components/AddedToCart";
-
+import AddedToCart from "./components/AddedtoCart";
 
 function App() {
 
