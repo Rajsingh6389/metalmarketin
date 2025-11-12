@@ -51,18 +51,33 @@ export default function Home() {
       <div className="mt-16 max-w-6xl mx-auto px-4 sm:px-8">
         <h3 className="text-3xl font-bold text-primary mb-6">Popular Categories</h3>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
-            <img src={ironimg} alt="Steel" className="mx-auto w-24 h-24"/>
-            <p className="mt-2 text-white font-semibold">Iron</p>
-          </div>
-          <div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
-            <img src={brassimg} alt="Copper" className="mx-auto w-24 h-24"/>
-            <p className="mt-2 text-white font-semibold">Brass</p>
-          </div>
-          <div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
-            <img src={copperimg} alt="Aluminum" className="mx-auto w-24 h-24"/>
-            <p className="mt-2 text-white font-semibold">Copper</p>
-          </div>
+        <div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
+  <img
+    src={ironimg}
+    alt="Steel"
+    className="w-full h-24 object-cover rounded-md"
+  />
+  <p className="mt-2 text-white font-semibold">Iron</p>
+</div>
+
+<div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
+  <img
+    src={brassimg}
+    alt="Brass"
+    className="w-full h-24 object-cover rounded-md"
+  />
+  <p className="mt-2 text-white font-semibold">Brass</p>
+</div>
+
+<div className="bg-dark rounded-xl shadow-neon p-4 text-center hover:scale-105 transition-transform">
+  <img
+    src={copperimg}
+    alt="Copper"
+    className="w-full h-24 object-cover rounded-md"
+  />
+  <p className="mt-2 text-white font-semibold">Copper</p>
+</div>
+
     
         </div>
       </div>
