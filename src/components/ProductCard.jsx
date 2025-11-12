@@ -9,8 +9,16 @@ export default function ProductCard({ product }) {
 
   const isOutOfStock = product.stock === 0;
 
+  const handleAddToCart = () => {
+    // ✅ Add product to cart
+    addToCart(product);
+
+    // ✅ Navigate to confirmation page
+    navigate("/added-to-cart");
+  };
+
   return (
-    <div className="bg-gray-900 p-3 pb-6 rounded-2xl shadow-neon hover:shadow-pink transition-all transform hover:scale-105 cursor-pointer w-64 mx-auto">
+    <div className="relative bg-gray-900 p-3 pb-6 rounded-2xl shadow-neon hover:shadow-pink transition-all transform hover:scale-105 cursor-pointer w-64 mx-auto">
 
       {/* Glow overlay */}
       <div className="absolute inset-0 rounded-2xl bg-pink-200 opacity-0 hover:opacity-10 pointer-events-none transition-all"></div>
@@ -44,14 +52,14 @@ export default function ProductCard({ product }) {
 
         {/* Price */}
         <p className="text-accent font-bold text-lg mt-1">
-          ₹{product.price} / 100 grams
+          ₹{product.price} / 1Kg
         </p>
 
         {/* Buttons */}
         <div className="mt-2 flex justify-between">
           {/* Add to Cart */}
           <button
-            onClick={() => addToCart({ ...product, quantity: 1 })}
+            onClick={handleAddToCart}
             disabled={isOutOfStock}
             className={`max-w-max px-3 py-1.5 rounded-lg font-semibold text-sm shadow-neon transition-all
               ${isOutOfStock ? "bg-gray-700 text-gray-400 cursor-not-allowed" : "bg-primary text-dark hover:bg-accent"}`}

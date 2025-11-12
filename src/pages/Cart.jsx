@@ -53,10 +53,7 @@ export default function Cart() {
 
                                                 {/* Weight Display */}
                                                 <p className="px-2 py-1 bg-gray-700 rounded text-white text-sm">
-                                                    {100 * item.quantity < 1000
-                                                        ? `${100 * item.quantity} g`
-                                                        : `${(100 * item.quantity / 1000).toFixed(2)} kg`
-                                                    }
+                                                    {`${item.quantity} Kg`}
                                                 </p>
                                             </div>
 

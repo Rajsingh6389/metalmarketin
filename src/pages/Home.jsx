@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import API from "../api";
 import ProductCard from "../components/ProductCard";
 import LoadingSpinner from "../components/LoadingSpinner";
-import brassimg from '../image/brass.png'
-import ironimg from '../image/iron.png'
 import copperimg from '../image/copper.png'
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const ironimg="https://i.ibb.co/DfYrp2Sx/bf8fc24a67b1.jpg"
+  const brassimg="https://i.ibb.co/hFFHG6ZX/77cdb4317162.jpg"
   
 
   useEffect(() => {

@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
     }
-    alert("Added to cart")
+    
   };
   const updateCart = (product, quantity) => {
     if (quantity <= 0) {

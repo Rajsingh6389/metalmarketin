@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ProductDetails from "./pages/ProductDetails";
 import Footer from "./components/Footer";
 import AboutShop from "./components/AboutShop";
+import AddedToCart from "./components/AddedtoCart";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/orders" element={<Orders />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/AboutShop" element={<AboutShop />} />
+            <Route path="/added-to-cart" element={<AddedToCart />} />
 
             <Route
               path="/admin"
