@@ -79,11 +79,7 @@ export default function ProductCard({ product }) {
           </button>
         </div>
       </div>
-
-      {/* Powered By Footer */}
-      <p className="absolute bottom-1 right-4 text-gray-500 text-[10px] opacity-70 z-10">
-        ⚙️ Powered by <span className="text-yellow-400">Material Mart</span>
-      </p>
+     
     </div>
   );
 }
