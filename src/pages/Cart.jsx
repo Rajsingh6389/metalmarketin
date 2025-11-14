@@ -25,7 +25,7 @@ export default function Cart() {
               {cart.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between bg-gray-900 p-4 rounded-xl shadow-neon hover:shadow-pink transition-all"
+                  className="flex items-center justify-between bg-gray-900 p-4 rounded-xl hover:shadow-pink transition-all"
                 >
                   {/* Product Info */}
                   <div className="flex items-center gap-4">
@@ -115,7 +115,7 @@ export default function Cart() {
             </div>
 
             {/* Cart Summary */}
-            <div className="mt-6 bg-gray-900 p-4 rounded-xl flex justify-between items-center shadow-neon">
+            <div className="mt-6 bg-gray-900 p-4 rounded-xl flex justify-between items-center  hover:shadow-pink">
               <div>
                 <p className="text-gray-400">Total</p>
                 <p className="text-2xl font-bold">₹{total}</p>
