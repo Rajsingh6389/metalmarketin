@@ -54,7 +54,7 @@ export default function ProductDetails() {
           </p>
 
           <p className="mt-4 text-2xl font-extrabold text-accent drop-shadow-[0_0_8px_#ff007f99]">
-            ₹{product.price} / per gram
+            ₹{product.price} / per Kg
           </p>
 
           <p className="mt-4 text-gray-300 leading-relaxed text-sm border-t border-gray-700 pt-3">
