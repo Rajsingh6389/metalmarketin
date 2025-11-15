@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import image from '../image/image.png';
-import { ShoppingCartIcon } from "@heroicons/react/24/outline"; // install @heroicons/react if not already
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -11,23 +11,21 @@ export default function Navbar() {
   const isAdmin = user?.role === "ADMIN";
 
   return (
-    <nav className="bg-dark shadow-neon text-white fixed top-0 w-full z-50">
+    <nav className="bg-dark text-white shadow-neon fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-8 flex justify-between items-center h-16">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-primary hover:text-accent transition-all">
-          <img src={image} alt="logo" className="w-12 sm:w-14 rounded-3xl"/>
-          <span className="text-yellow-200 hover:text-accent">MetalMarket</span>
+        <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-primary">
+          <img src={image} alt="logo" className="w-12 sm:w-14 rounded-3xl" />
+          <span>MetalMarket</span>
         </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-6">
           <Link to="/" className="hover:text-accent">Home</Link>
-          
           <Link to="/cart" className="flex items-center gap-1 hover:text-accent">
             <ShoppingCartIcon className="w-5 h-5" />
             Cart
           </Link>
-          
           <Link to="/AboutShop" className="hover:text-accent">About Shop</Link>
           {user ? (
             <>
@@ -61,12 +59,10 @@ export default function Navbar() {
       {isOpen && (
         <div className="md:hidden px-4 pb-4 space-y-3">
           <Link to="/" className="block hover:text-accent">Home</Link>
-          
           <Link to="/cart" className="flex items-center gap-1 hover:text-accent">
             <ShoppingCartIcon className="w-5 h-5" />
             Cart
           </Link>
-          
           <Link to="/AboutShop" className="block hover:text-accent">About Shop</Link>
           {user ? (
             <>
