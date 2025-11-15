@@ -16,10 +16,7 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState([]);
 
   const load = async () => {
-    const [pRes, oRes] = await Promise.all([
-      API.get("/products"),
-      API.get("/orders"),
-    ]);
+    const [pRes, oRes] = await Promise.all([API.get("/products"), API.get("/orders")]);
     setProducts(pRes.data);
     setOrders(oRes.data);
   };
@@ -47,7 +44,7 @@ export default function AdminDashboard() {
       });
       setEditing(null);
       load();
-    } catch (err) {
+    } catch {
       toast.error("Save failed");
     }
   };
@@ -77,76 +74,68 @@ export default function AdminDashboard() {
     load();
   };
 
-  // ✅ Cancel/Delete Order function
   const handleOrderDelete = async (orderId) => {
     if (!confirm("Are you sure you want to cancel this order?")) return;
     try {
       await API.put(`/orders/${orderId}/cancel`);
       toast.success("Order cancelled/deleted successfully");
-      
       load();
-    } catch (err) {
+    } catch {
       toast.error("Failed to cancel order");
     }
   };
 
   return (
-    <div className="pt-28 px-6 min-h-screen bg-dark text-white">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="pt-28 px-4 sm:px-6 lg:px-8 min-h-screen bg-dark text-white">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8">
+
         {/* PRODUCTS SECTION */}
         <div>
           <h2 className="text-xl font-bold text-primary mb-4">Products</h2>
+
+          {/* Product Form */}
           <div className="bg-gray-900 p-4 rounded-xl mb-4">
             <div className="grid gap-2">
               <input
                 placeholder="Name"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="p-2 bg-gray-800 rounded"
+                className="p-2 bg-gray-800 rounded w-full"
               />
               <input
                 placeholder="Category"
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="p-2 bg-gray-800 rounded"
+                className="p-2 bg-gray-800 rounded w-full"
               />
               <input
                 placeholder="Price"
                 type="number"
                 value={form.price}
-                onChange={(e) =>
-                  setForm({ ...form, price: parseFloat(e.target.value) })
-                }
-                className="p-2 bg-gray-800 rounded"
+                onChange={(e) => setForm({ ...form, price: parseFloat(e.target.value) })}
+                className="p-2 bg-gray-800 rounded w-full"
               />
               <input
                 placeholder="Stock"
                 type="number"
                 value={form.stock}
-                onChange={(e) =>
-                  setForm({ ...form, stock: parseInt(e.target.value) })
-                }
-                className="p-2 bg-gray-800 rounded"
+                onChange={(e) => setForm({ ...form, stock: parseInt(e.target.value) })}
+                className="p-2 bg-gray-800 rounded w-full"
               />
               <input
                 placeholder="Image URL"
                 value={form.imageUrl}
                 onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                className="p-2 bg-gray-800 rounded"
+                className="p-2 bg-gray-800 rounded w-full"
               />
               <textarea
                 placeholder="Description"
                 value={form.description}
-                onChange={(e) =>
-                  setForm({ ...form, description: e.target.value })
-                }
-                className="p-2 bg-gray-800 rounded"
+                onChange={(e) => setForm({ ...form, description: e.target.value })}
+                className="p-2 bg-gray-800 rounded w-full resize-none"
               />
-              <div className="flex gap-2">
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-primary text-dark rounded"
-                >
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
+                <button onClick={handleSave} className="px-4 py-2 bg-primary text-dark rounded w-full sm:w-auto">
                   Save
                 </button>
                 <button
@@ -161,7 +150,7 @@ export default function AdminDashboard() {
                     });
                     setEditing(null);
                   }}
-                  className="px-4 py-2 bg-red-600 rounded"
+                  className="px-4 py-2 bg-red-600 rounded w-full sm:w-auto"
                 >
                   Clear
                 </button>
@@ -172,34 +161,19 @@ export default function AdminDashboard() {
           {/* Product List */}
           <div className="space-y-3">
             {products.map((p) => (
-              <div
-                key={p.id}
-                className="bg-gray-900 p-3 rounded flex justify-between items-center"
-              >
-                <div className="flex items-center gap-3">
-                  <img
-                    src={p.imageUrl || "/placeholder.png"}
-                    alt={p.name}
-                    className="w-16 h-16 object-cover rounded"
-                  />
+              <div key={p.id} className="bg-gray-900 p-3 rounded flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-3">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <img src={p.imageUrl || "/placeholder.png"} alt={p.name} className="w-16 h-16 object-cover rounded" />
                   <div>
                     <div className="font-semibold">{p.name}</div>
-                    <div className="text-sm text-gray-400">
-                      ₹{p.price} • {p.stock} in stock
-                    </div>
+                    <div className="text-sm text-gray-400">₹{p.price} • {p.stock} in stock</div>
                   </div>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(p)}
-                    className="px-3 py-1 bg-primary rounded"
-                  >
+                <div className="flex gap-2 mt-2 sm:mt-0">
+                  <button onClick={() => handleEdit(p)} className="px-3 py-1 bg-primary rounded">
                     Edit
                   </button>
-                  <button
-                    onClick={() => handleDelete(p.id)}
-                    className="px-3 py-1 bg-red-600 rounded"
-                  >
+                  <button onClick={() => handleDelete(p.id)} className="px-3 py-1 bg-red-600 rounded">
                     Delete
                   </button>
                 </div>
@@ -214,46 +188,30 @@ export default function AdminDashboard() {
           <div className="space-y-3">
             {orders.map((o) => (
               <div key={o.id} className="bg-gray-900 p-3 rounded">
-                <div className="flex justify-between">
-                  <div>
+                <div className="flex flex-col md:flex-row md:justify-between">
+                  <div className="flex flex-col gap-1">
                     <div className="font-semibold">Order #{o.id}</div>
-                    <div className="text-sm text-gray-400">
-                      {new Date(o.createdAt).toLocaleString()}
-                    </div>
-                    <div className="mt-1 text-sm">User: {o.userId}</div>
-                    <div className="mt-1">Type: {o.orderType}</div>
-                    <div className="mt-1">
+                    <div className="text-sm text-gray-400">{new Date(o.createdAt).toLocaleString()}</div>
+                    <div className="text-sm">User: {o.userId}</div>
+                    <div className="text-sm">Type: {o.orderType}</div>
+                    <div className="text-sm">
                       Status: <span className="font-medium">{o.status}</span>
                     </div>
-                    <div className="mt-1">
+                    <div className="text-sm">
                       Address: <span className="font-medium">{o.address}</span>
                     </div>
                   </div>
 
-                  <div className="flex flex-col gap-2 items-end">
+                  <div className="flex flex-col gap-2 mt-2 md:mt-0 items-start md:items-end">
                     <div className="font-bold">₹{o.totalAmount}</div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(o.id, "CONFIRMED")
-                        }
-                        className="px-2 py-1 bg-green-600 rounded"
-                      >
+                    <div className="flex flex-wrap gap-2">
+                      <button onClick={() => updateOrderStatus(o.id, "CONFIRMED")} className="px-2 py-1 bg-green-600 rounded">
                         Confirm
                       </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(o.id, "DELIVERED")
-                        }
-                        className="px-2 py-1 bg-blue-600 rounded"
-                      >
+                      <button onClick={() => updateOrderStatus(o.id, "DELIVERED")} className="px-2 py-1 bg-blue-600 rounded">
                         Delivered
                       </button>
-                      {/* ✅ Delete/Cancel Button */}
-                      <button
-                        onClick={() => handleOrderDelete(o.id)}
-                        className="px-2 py-1 bg-red-700 rounded"
-                      >
+                      <button onClick={() => handleOrderDelete(o.id)} className="px-2 py-1 bg-red-700 rounded">
                         Cancel
                       </button>
                     </div>
@@ -262,13 +220,8 @@ export default function AdminDashboard() {
 
                 <div className="mt-2 text-sm text-gray-300">
                   {o.orderItems?.map((it) => (
-                    <div
-                      key={it.id}
-                      className="flex justify-between border-t border-gray-700 pt-1"
-                    >
-                      <span>
-                        {it.productName} × {it.quantity}
-                      </span>
+                    <div key={it.id} className="flex justify-between border-t border-gray-700 pt-1">
+                      <span>{it.productName} × {it.quantity}</span>
                       <span>₹{it.price * it.quantity}</span>
                     </div>
                   ))}
