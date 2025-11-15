@@ -14,6 +14,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Footer from "./components/Footer";
 import AboutShop from "./components/AboutShop";
 import AddedToCart from "./pages/AddedToCart";
+import VerificationPageForRaj from "./components/VerificationPageForRaj";
 
 function App() {
 
@@ -32,6 +33,8 @@ function App() {
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/AboutShop" element={<AboutShop />} />
             <Route path="/added-to-cart" element={<AddedToCart />} />
+            <Route path="/verify" element={<VerificationPageForRaj />} />
+            {/* <Route path="/verify?cert=CERT-001-002-A1&name=RitikTiwari" element={<VerificationPageForRitik />} /> */}
 
             <Route
               path="/admin"
