@@ -16,7 +16,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 text-2xl font-bold text-primary hover:text-accent transition-all">
           <img src={image} alt="logo" className="w-12 sm:w-14 rounded-3xl"/>
-          <span className="hover:text-accent">MetalMarket</span>
+          <span className="text-yellow-200 hover:text-accent">MetalMarket</span>
         </Link>
 
         {/* Desktop Links */}
