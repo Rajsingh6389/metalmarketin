@@ -7,7 +7,7 @@ export default function Orders() {
 
   useEffect(() => {
     if (!user?.id) return;
-    API.get(`/orders/user/${user.id}`).then(res => setOrders(res.data)).catch(()=>{});
+    API.get(`/orders/user/${user.id}`).then(res => setOrders(res.data)).catch(() => { });
   }, [user]);
 
   return (
@@ -26,9 +26,17 @@ export default function Orders() {
                     <p className="text-gray-400 text-sm">{new Date(o.createdAt).toLocaleString()}</p>
                     <p className="mt-2">Type: <span className="font-medium">{o.orderType}</span></p>
                     <p>Status: <span className="font-medium">{o.status}</span></p>
+                    <p>
+                      Expected Delivery Date:{" "}
+                      <span className="font-medium">
+                        {new Date(new Date(o.createdAt).getTime() + 7 * 24 * 60 * 60 * 1000)
+                          .toLocaleDateString()}
+                      </span>
+                    </p>
+
                   </div>
-                  <div className="text-right">
-                    <p className="font-bold">₹{o.totalAmount}</p>
+                  <div className="flex flex-col gap-2 items-end">
+                    <div className="text-lg font-bold">₹{o.orderType === 'COD' ? (o.totalAmount + 50) : o.totalAmount}</div>
                   </div>
                 </div>
                 <div className="mt-3 grid grid-cols-1 gap-2">
