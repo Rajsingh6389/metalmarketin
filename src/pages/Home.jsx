@@ -3,7 +3,6 @@ import API from "../api";
 import ProductCard from "../components/ProductCard";
 import LoadingSpinner from "../components/LoadingSpinner";
 import copperimg from "../image/copper.png";
-import Navbar from "../components/Navbar";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -21,12 +20,35 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0f0f0f] via-[#111111] to-[#1a1a1d] text-white">
-      {/* Navbar */}
-      <Navbar />
+    <div
+      className="pt-20 min-h-screen text-white font-inter relative overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.08), transparent 60%),
+          radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05), transparent 60%),
+          linear-gradient(180deg, #0d0d0f 0%, #111111 45%, #1a1a1d 100%)
+        `,
+      }}
+    >
+      {/* Subtle texture */}
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-mosaic.png')] opacity-10 mix-blend-overlay"></div>
+
+      {/* Soft animated light shine */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="w-[200%] h-[200%] bg-gradient-to-r from-yellow-500/5 via-transparent to-yellow-500/5 animate-[shine_12s_linear_infinite]" />
+      </div>
+
+      <style>
+        {`
+          @keyframes shine {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+          }
+        `}
+      </style>
 
       {/* Header */}
-      <div className="text-center py-12 px-4 pt-20">
+      <div className="relative text-center py-12 px-4">
         <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg">
           <marquee behavior="scroll" direction="left" scrollamount="10">
             Welcome to MetalMarket
@@ -43,7 +65,7 @@ export default function Home() {
           <LoadingSpinner />
         </div>
       ) : (
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 px-6 sm:px-10">
+        <div className="relative grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-10 px-6 sm:px-10 z-10">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -51,7 +73,7 @@ export default function Home() {
       )}
 
       {/* Popular Categories */}
-      <div className="mt-20 max-w-6xl mx-auto px-6 sm:px-10">
+      <div className="relative mt-20 max-w-6xl mx-auto px-6 sm:px-10 z-10">
         <h3 className="text-3xl font-bold text-yellow-400 mb-8 text-center">
           Popular Categories
         </h3>
@@ -77,7 +99,7 @@ export default function Home() {
       </div>
 
       {/* Why Choose Us */}
-      <div className="mt-20 max-w-6xl mx-auto px-6 sm:px-10">
+      <div className="relative mt-20 max-w-6xl mx-auto px-6 sm:px-10 z-10">
         <h3 className="text-3xl font-bold text-yellow-400 mb-8 text-center">
           Why Choose MetalMarket?
         </h3>
@@ -100,7 +122,7 @@ export default function Home() {
       </div>
 
       {/* Testimonials */}
-      <div className="mt-20 bg-gray-900/70 border-t border-yellow-500/30 px-8 py-12 text-center rounded-t-[40px] shadow-inner shadow-yellow-500/20">
+      <div className="relative mt-20 bg-gray-900/70 border-t border-yellow-500/30 px-8 py-12 text-center rounded-t-[40px] shadow-inner shadow-yellow-500/20 z-10">
         <h3 className="text-3xl font-bold text-yellow-400 mb-10">
           What Our Customers Say
         </h3>
@@ -112,7 +134,7 @@ export default function Home() {
             },
             {
               text: "Best place to buy industrial materials in Kanpur. Great service!",
-              name: "Raj Singh",
+              name: "Priya Singh",
             },
           ].map((review, i) => (
             <div
