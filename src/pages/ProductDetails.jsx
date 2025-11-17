@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import API from "../api";
 import { CartContext } from "../context/CartContext";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useContext(CartContext);
+  const navigate=useNavigate();
 
   useEffect(() => {
     API.get(`/products/${id}`)
@@ -121,6 +122,7 @@ export default function ProductDetails() {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#fb641b] hover:bg-[#e65a18]"
               }`}
+              onClick={()=>{navigate("/checkout")}}
             >
               Buy Now
             </button>
