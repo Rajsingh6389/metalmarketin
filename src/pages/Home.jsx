@@ -32,7 +32,7 @@ export default function Home() {
       <div className="w-full aspect-[16/7] sm:aspect-[16/6] md:aspect-[16/5] lg:aspect-[16/4] bg-white shadow-sm overflow-hidden rounded-sm">
         <div className="relative h-full w-full">
           <div className="absolute inset-0 slider-fade">
-            <img src={sliderimg} className="slider-fade-img" alt="" />
+            <img src={slider3img} className="slider-fade-img" alt="" />
             <img src={slider2img} className="slider-fade-img" alt="" />
             <img src={slider3img} className="slider-fade-img" alt="" />
           </div>

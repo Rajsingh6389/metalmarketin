@@ -50,6 +50,16 @@ export default function AdminDashboard() {
     load();
   }, []);
 
+  // ---------------- helper: compute order total reliably ----------------
+  // Uses orderItems[] and includes COD charge if applicable
+  const getOrderTotal = (order) => {
+    const itemsTotal = (order.orderItems || []).reduce(
+      (s, it) => s + (Number(it.price) || 0) * (Number(it.quantity) || 0),
+      0
+    );
+    return itemsTotal + (order.orderType === "COD" ? 50 : 0);
+  };
+
   // ---------------- product handlers (unchanged) ----------------
   const handleSave = async () => {
     try {
@@ -136,24 +146,26 @@ export default function AdminDashboard() {
   const pendingCount = orders.filter((o) => o.status === "PENDING" || o.status === "CONFIRMED").length;
   const cancelledCount = orders.filter((o) => o.status === "CANCELLED").length;
 
-  // totalRevenue = sum of totalAmount for DELIVERED orders
+  // totalRevenue = sum of delivered orders using getOrderTotal
   const totalRevenue = orders
     .filter((o) => o.status === "DELIVERED")
-    .reduce((sum, o) => sum + (o.totalAmount || 0), 0);
+    .reduce((sum, o) => sum + getOrderTotal(o), 0);
 
-  // revenue by date (for line chart)
+  // revenue by date (for line chart) — use getOrderTotal
   const revenueByDate = {};
   orders
     .filter((o) => o.status === "DELIVERED")
     .forEach((o) => {
       const dateKey = new Date(o.createdAt).toLocaleDateString();
-      revenueByDate[dateKey] = (revenueByDate[dateKey] || 0) + (o.totalAmount || 0);
+      revenueByDate[dateKey] = (revenueByDate[dateKey] || 0) + getOrderTotal(o);
     });
 
-  const revenueChartData = Object.keys(revenueByDate).map((date) => ({
-    date,
-    revenue: revenueByDate[date],
-  }));
+  const revenueChartData = Object.keys(revenueByDate)
+    .sort((a, b) => new Date(a) - new Date(b))
+    .map((date) => ({
+      date,
+      revenue: revenueByDate[date],
+    }));
 
   // category data
   const categoryCount = {};
@@ -177,15 +189,15 @@ export default function AdminDashboard() {
   const now = new Date();
   const revenueToday = orders
     .filter((o) => o.status === "DELIVERED" && new Date(o.createdAt).toDateString() === now.toDateString())
-    .reduce((s, o) => s + (o.totalAmount || 0), 0);
+    .reduce((s, o) => s + getOrderTotal(o), 0);
 
   const revenue7Days = orders
     .filter((o) => o.status === "DELIVERED" && (now - new Date(o.createdAt)) / (1000 * 60 * 60 * 24) <= 7)
-    .reduce((s, o) => s + (o.totalAmount || 0), 0);
+    .reduce((s, o) => s + getOrderTotal(o), 0);
 
   const revenue30Days = orders
     .filter((o) => o.status === "DELIVERED" && (now - new Date(o.createdAt)) / (1000 * 60 * 60 * 24) <= 30)
-    .reduce((s, o) => s + (o.totalAmount || 0), 0);
+    .reduce((s, o) => s + getOrderTotal(o), 0);
 
   // ---------------- UI ----------------
   return (
@@ -366,8 +378,9 @@ export default function AdminDashboard() {
                     </div>
 
                     <div className="flex flex-col items-start md:items-end gap-2">
-                      <div className="text-xl font-bold">₹{o.orderType === "COD" ? o.totalAmount + 50 : o.totalAmount}</div>
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="text-xl font-bold">₹{getOrderTotal(o)}</div>
+                      {o.orderType === "COD" && <div className="text-xs text-gray-500">Includes ₹50 COD charge</div>}
+                      <div className="flex gap-2 flex-wrap mt-2">
                         <button onClick={() => updateOrderStatus(o.id, "CONFIRMED")} className="px-3 py-1 bg-green-600 text-white rounded">Confirm</button>
                         <button onClick={() => updateOrderStatus(o.id, "DELIVERED")} className="px-3 py-1 bg-blue-600 text-white rounded">Delivered</button>
                         <button onClick={() => handleOrderDelete(o.id)} className="px-3 py-1 bg-red-600 text-white rounded">Cancel</button>
@@ -377,9 +390,9 @@ export default function AdminDashboard() {
 
                   <div className="mt-3 border-t pt-2 text-sm">
                     {o.orderItems?.map((it) => (
-                      <div key={it.id} className="flex justify-between py-1">
+                      <div key={it.id || `${it.productName}-${Math.random()}`} className="flex justify-between py-1">
                         <span>{it.productName} × {it.quantity}</span>
-                        <span>₹{it.price * it.quantity}</span>
+                        <span>₹{(it.price || 0) * (it.quantity || 0)}</span>
                       </div>
                     ))}
                   </div>
