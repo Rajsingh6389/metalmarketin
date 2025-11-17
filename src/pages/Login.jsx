@@ -7,72 +7,95 @@ import AuthContext from "../context/AuthContext";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // << added
+  const [showPassword, setShowPassword] = useState(false);
+
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await login(email, password); 
+      const data = await login(email, password);
       toast.success("Logged in");
 
-      if (data.user.role === "ADMIN") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
-
+      if (data.user.role === "ADMIN") navigate("/admin");
+      else navigate("/");
     } catch (err) {
       toast.error(err?.response?.data || "Login failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-dark pt-20">
-      <div className="w-full max-w-md bg-gray-900/70 backdrop-blur-md p-8 rounded-3xl shadow-neon border border-gray-800">
-        <h2 className="text-3xl font-bold text-primary mb-4 text-center">Welcome back</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#f1f3f6] px-4 py-10">
+      
+      {/* Card */}
+      <div className="w-full max-w-md bg-white rounded-lg shadow-lg border">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Left Blue Header */}
+        <div className="bg-[#2874f0] text-white p-6 rounded-t-lg text-center">
+          <h2 className="text-2xl font-bold">Login</h2>
+          <p className="text-sm opacity-90 mt-1">
+            Get access to your Orders & Wishlist
+          </p>
+        </div>
 
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            type="email"
-            className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white focus:outline-none"
-            required
-          />
+        {/* Form Section */}
+        <div className="p-6">
 
-          {/* Password + Show/Hide toggle */}
-          <div className="relative">
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              type={showPassword ? "text" : "password"}  // << toggle type
-              className="w-full px-4 py-3 rounded-lg bg-gray-800 text-white focus:outline-none"
-              required
-            />
+          <form onSubmit={handleSubmit} className="space-y-4">
 
+            {/* Email */}
+            <div>
+              <label className="text-gray-700 font-medium text-sm">Email</label>
+              <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter email"
+                type="email"
+                required
+                className="w-full mt-1 px-4 py-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#2874f0] outline-none"
+              />
+            </div>
+
+            {/* Password + Show/Hide */}
+            <div>
+              <label className="text-gray-700 font-medium text-sm">Password</label>
+              <div className="relative mt-1">
+                <input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter password"
+                  type={showPassword ? "text" : "password"}
+                  required
+                  className="w-full px-4 py-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#2874f0] outline-none"
+                />
+
+                {/* Show/Hide */}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#2874f0] text-sm font-medium"
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+            </div>
+
+            {/* Login Button */}
             <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)} // << toggle
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-primary text-sm"
+              className="w-full py-3 bg-[#fb641b] text-white font-semibold rounded-md hover:bg-[#d75a18] transition-all shadow-sm"
             >
-              {showPassword ? "Hide" : "Show"}
+              Login
             </button>
-          </div>
+          </form>
 
-          <button className="w-full py-3 bg-primary text-dark rounded-lg font-semibold hover:brightness-110">
-            Login
-          </button>
-        </form>
-
-        <p className="mt-4 text-center text-gray-400">
-          No account?{" "}
-          <Link to="/signup" className="text-accent">Sign up</Link>
-        </p>
+          <p className="mt-5 text-center text-sm text-gray-600">
+            New to MetalMarket?
+            <Link to="/signup" className="text-[#2874f0] font-medium ml-1">
+              Create an account
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

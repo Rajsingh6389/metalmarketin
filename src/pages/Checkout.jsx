@@ -24,197 +24,163 @@ export default function Checkout() {
   const handlePlaceOrder = async () => {
     if (cart.length === 0) return toast.error("Cart is empty");
 
-    if (orderType === "COD") {
-      if (!name || !phone || !street || !city || !state || !pincode) {
-        return toast.error("Please fill all delivery address fields");
-      }
-      if (!/^[6-9]\d{9}$/.test(phone)) {
-        return toast.error("Please enter a valid 10-digit phone number");
-      }
+    if (orderType === "UPI") {
+      return toast.error("UPI Payment Coming Soon!");
     }
 
-    if (orderType === "PICKUP") {
-      if (!name || !phone) {
-        return toast.error("Please enter your name & phone");
-      }
-      if (!/^[6-9]\d{9}$/.test(phone)) {
-        return toast.error("Please enter a valid 10-digit phone number");
-      }
+    if (!name || !phone) return toast.error("Name & Phone Required");
+
+    if (!/^[6-9]\d{9}$/.test(phone))
+      return toast.error("Enter valid 10-digit phone number");
+
+    if (orderType === "COD") {
+      if (!street || !city || !state || !pincode)
+        return toast.error("Fill complete address");
     }
 
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-      const items = cart.map(c => ({
+      const items = cart.map((c) => ({
         productId: c.id,
-        quantity: c.quantity
+        quantity: c.quantity,
       }));
 
       const fullAddress =
         orderType === "COD"
           ? `${name}, ${phone}, ${street}, ${city}, ${state} - ${pincode}`
-          : `Pickup Order - ${name}, ${phone}, Shop Address: ${SHOP_ADDRESS}`;
+          : `Pickup - ${name}, ${phone}. Store: ${SHOP_ADDRESS}`;
 
       const payload = {
         userId: user.id,
         orderType,
         items,
-        address: fullAddress
+        address: fullAddress,
       };
 
       await API.post("/orders", payload);
 
-      toast.success("Order placed successfully!");
+      toast.success("Order Placed!");
       clearCart();
       navigate("/orders");
     } catch (err) {
-      toast.error(err?.response?.data || "Order failed, check login status");
+      toast.error("Order failed, login required");
     }
   };
 
   return (
-    <div className="pt-28 px-6 min-h-screen bg-dark text-white">
-      <div className="max-w-3xl mx-auto bg-gray-900 p-6 rounded-3xl border border-yellow-400 shadow-[0_0_20px_rgba(255,215,0,0.4)]">
-        <h2 className="text-2xl font-bold text-yellow-400 mb-6">Checkout</h2>
+    <div className="pt-28 px-4 sm:px-6 min-h-screen bg-[#f1f3f6]">
+
+      {/* MAIN CARD */}
+      <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md border">
+
+        <h2 className="text-2xl font-bold text-[#2874f0] mb-4">
+          Checkout
+        </h2>
 
         {/* Order Type */}
         <div className="mb-4">
-          <label className="block text-gray-300 mb-1">Order Type</label>
+          <label className="block font-medium text-gray-700 mb-1">
+            Order Type
+          </label>
+
           <select
             value={orderType}
-            onChange={e => setOrderType(e.target.value)}
-            className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg"
+            onChange={(e) => setOrderType(e.target.value)}
+            className="w-full p-3 border rounded-md bg-gray-50 focus:border-[#2874f0] outline-none"
           >
             <option value="COD">Cash on Delivery</option>
-            <option value="PICKUP">Pickup from Store</option>
+            <option value="PICKUP">Pickup From Store</option>
+            <option value="UPI">UPI Payment (Coming Soon)</option>
           </select>
         </div>
 
-        {/* COD Form */}
-        {orderType === "COD" ? (
+        {/* UPI COMING SOON */}
+        {orderType === "UPI" && (
+          <div className="bg-blue-50 border border-blue-300 text-blue-700 p-4 rounded-md mb-4 shadow-sm">
+            <b>UPI Payment Coming Soon!</b>
+            <p className="text-sm mt-1">
+              Currently available: Cash on Delivery & Store Pickup
+            </p>
+          </div>
+        )}
+
+        {/* COD SECTION */}
+        {orderType === "COD" && (
           <div className="space-y-4">
 
-            <div>
-              <label className="block text-gray-300 mb-1">Full Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Your Name"
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-300 mb-1">Phone Number</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="10-digit mobile number"
-                maxLength={10}
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-300 mb-1">Street Address</label>
-              <input
-                type="text"
-                value={street}
-                onChange={e => setStreet(e.target.value)}
-                placeholder="House no, Street"
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
+            <Input label="Full Name" value={name} setValue={setName} />
+            <Input
+              label="Phone Number"
+              value={phone}
+              setValue={setPhone}
+              maxLength={10}
+            />
+            <Input
+              label="Street Address"
+              value={street}
+              setValue={setStreet}
+            />
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-300 mb-1">City</label>
-                <input
-                  type="text"
-                  value={city}
-                  onChange={e => setCity(e.target.value)}
-                  placeholder="City"
-                  className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-300 mb-1">Pincode</label>
-                <input
-                  type="text"
-                  value={pincode}
-                  onChange={e => setPincode(e.target.value)}
-                  placeholder="Pin Code"
-                  className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-                />
-              </div>
+              <Input label="City" value={city} setValue={setCity} />
+              <Input label="Pincode" value={pincode} setValue={setPincode} />
             </div>
 
-            <div>
-              <label className="block text-gray-300 mb-1">State</label>
-              <input
-                type="text"
-                value={state}
-                onChange={e => setState(e.target.value)}
-                placeholder="State"
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
+            <Input label="State" value={state} setValue={setState} />
           </div>
-        ) : (
-          /* PICKUP SECTION */
+        )}
+
+        {/* PICKUP SECTION */}
+        {orderType === "PICKUP" && (
           <div className="space-y-4">
+            <Input label="Full Name" value={name} setValue={setName} />
+            <Input
+              label="Phone Number"
+              value={phone}
+              setValue={setPhone}
+              maxLength={10}
+            />
 
-            <div>
-              <label className="block text-gray-300 mb-1">Full Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Your Name"
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-300 mb-1">Phone Number</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="10-digit mobile number"
-                maxLength={10}
-                className="w-full p-3 bg-gray-800 border border-yellow-500/40 rounded-lg focus:border-yellow-400 outline-none"
-              />
-            </div>
-
-            <div className="bg-gray-800 p-4 rounded-xl border border-yellow-500/40">
-              <p className="text-gray-300 font-semibold">Pickup Location</p>
-              <p className="text-gray-400 text-sm mt-1">{SHOP_ADDRESS}</p>
+            <div className="p-4 bg-gray-50 rounded-md border">
+              <p className="font-semibold text-gray-700">Pickup Store</p>
+              <p className="text-sm text-gray-600 mt-1">{SHOP_ADDRESS}</p>
             </div>
           </div>
         )}
 
-        {/* Total & Button */}
+        {/* TOTAL & BUTTON */}
         <div className="flex justify-between items-center mt-6">
           <div>
-            <p className="text-gray-300">Total</p>
-            {orderType === "COD" ? (
-              <p className="text-2xl font-bold text-yellow-400">₹{total + 50}</p>
-            ) : (
-              <p className="text-2xl font-bold text-yellow-400">₹{total}</p>
-            )}
+            <p className="text-gray-600 text-sm">Total Amount</p>
+            <p className="text-2xl font-bold text-[#2874f0]">
+              ₹{orderType === "COD" ? total + 50 : total}
+            </p>
           </div>
 
           <button
             onClick={handlePlaceOrder}
-            className="px-6 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:bg-yellow-500 transition-all shadow-[0_0_10px_rgba(255,215,0,0.5)]"
+            className="px-6 py-3 bg-[#fb641b] text-white rounded-lg font-semibold hover:bg-[#d75a18] transition-all shadow-sm"
           >
             Place Order
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* REUSABLE INPUT COMPONENT */
+function Input({ label, value, setValue, ...rest }) {
+  return (
+    <div>
+      <label className="block mb-1 font-medium text-gray-700">{label}</label>
+      <input
+        {...rest}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-full p-3 border rounded-md bg-gray-50 focus:border-[#2874f0] outline-none"
+      />
     </div>
   );
 }

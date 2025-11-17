@@ -10,76 +10,88 @@ export default function ProductCard({ product }) {
   const isOutOfStock = product.stock === 0;
 
   const handleAddToCart = () => {
-    // ✅ Add product to cart
     addToCart(product);
-
-    // ✅ Navigate to confirmation page
     navigate("/added-to-cart");
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 pb-6 rounded-2xl border border-gray-700 hover:border-yellow-400 shadow-lg hover:shadow-yellow-400/20 transition-all transform hover:-translate-y-1 cursor-pointer w-64 mx-auto duration-300">
+    <div className="bg-white border rounded-md p-2 sm:p-3 shadow hover:shadow-lg transition-all cursor-pointer flex flex-col">
 
-      {/* Glow overlay */}
-      <div className="absolute inset-0 rounded-2xl bg-yellow-300 opacity-0 hover:opacity-10 pointer-events-none transition-all duration-300"></div>
-
-      {/* Product Image */}
-      <div className="relative overflow-hidden rounded-xl z-10">
+      {/* ------------ PRODUCT IMAGE ------------ */}
+      <div
+        className="relative w-full h-32 xs:h-36 sm:h-40 md:h-44 rounded-md overflow-hidden"
+        onClick={() => navigate(`/products/${product.id}`)}
+      >
         <img
           src={product.imageUrl || "/placeholder.png"}
           alt={product.name}
-          className="h-44 w-full object-cover rounded-xl transition-transform duration-500 hover:scale-110"
+          className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
         />
-        <span className="absolute top-2 left-2 bg-yellow-400 text-black px-2 py-0.5 rounded-full text-xs font-semibold shadow-md z-20">
+
+        <span className="absolute top-2 left-2 bg-blue-600 text-white px-2 py-0.5 text-[10px] sm:text-xs rounded shadow">
           {product.category}
         </span>
       </div>
 
-      {/* Product Info */}
-      <div className="z-10 mt-3">
-        <h3 className="text-md font-semibold text-white tracking-wide">{product.name}</h3>
+      {/* ------------ PRODUCT DETAILS ------------ */}
+      <div className="mt-3 flex flex-col flex-1">
 
-        {/* Stars */}
+        {/* NAME */}
+        <h3
+          className="text-xs sm:text-sm md:text-base font-semibold line-clamp-2 leading-tight"
+          onClick={() => navigate(`/products/${product.id}`)}
+        >
+          {product.name}
+        </h3>
+
+        {/* RATING */}
         <div className="flex items-center gap-1 mt-1">
           {[...Array(5)].map((_, i) => (
             <AiFillStar
               key={i}
-              className={`text-yellow-400 ${i < product.rating ? "opacity-100" : "opacity-30"} text-sm`}
+              className={`${
+                i < product.rating ? "text-yellow-500" : "text-gray-300"
+              } text-xs sm:text-sm`}
             />
           ))}
-          <span className="text-gray-400 text-xs ml-1">({product.rating || 0})</span>
+          <span className="text-[10px] sm:text-xs text-gray-600">
+            ({product.rating || 0})
+          </span>
         </div>
 
-        {/* Price */}
-        <p className="text-yellow-400 font-bold text-lg mt-2">
-          ₹{product.price} <span className="text-gray-400 text-sm">/ 1Kg</span>
+        {/* PRICE */}
+        <p className="text-base sm:text-lg font-bold text-gray-900 mt-2">
+          ₹{product.price}
+          <span className="text-gray-500 text-xs sm:text-sm"> / Kg</span>
         </p>
 
-        {/* Buttons */}
-        <div className="mt-3 flex justify-between items-center gap-2">
+        {/* ------------ BUTTONS ------------ */}
+        <div className="mt-auto flex flex-col sm:flex-row gap-2 pt-3">
+
           {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className={`flex p-2 rounded-lg font-semibold text-sm transition-all duration-300 
-              ${isOutOfStock 
-                ? "bg-gray-700 text-gray-400 cursor-not-allowed" 
-                : "bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:scale-[1.03] hover:shadow-md hover:shadow-yellow-400/30"
+            className={`w-full py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-md transition-all 
+              ${
+                isOutOfStock
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  : "bg-orange-500 text-white hover:bg-orange-600"
               }`}
           >
-            {isOutOfStock ? "Not Available" : "🛒 Add to Cart"}
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </button>
 
-          {/* View Details */}
+          {/* Details */}
           <button
             onClick={() => navigate(`/products/${product.id}`)}
-            className="flex-1 px-2 py-2 rounded-lg font-semibold text-sm bg-gray-800 text-white hover:bg-gray-700 hover:scale-[1.02] transition-all duration-300 shadow-inner"
+            className="w-full py-1.5 sm:py-2 bg-blue-600 text-white text-xs sm:text-sm font-medium rounded-md transition-all hover:bg-blue-700"
           >
-            View Details
+            Details
           </button>
         </div>
+
       </div>
-     
     </div>
   );
 }
