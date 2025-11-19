@@ -122,7 +122,9 @@ export default function ProductDetails() {
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#fb641b] hover:bg-[#e65a18]"
               }`}
-              onClick={()=>{navigate("/checkout")}}
+              onClick={()=>{  addToCart({ ...product, quantity });  // add product to cart
+              toast.success("Redirecting to checkout...");
+              navigate("/checkout");  }}
             >
               Buy Now
             </button>
