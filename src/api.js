@@ -1,9 +1,7 @@
 import axios from "axios"
 
 const API = axios.create({
-  // baseURL: "https://metalmarket-server-3.onrender.com/api",
   baseURL: "https://metalmarketserver-production.up.railway.app/api",
-
 });
 
 API.interceptors.request.use((config) => {
