@@ -58,7 +58,17 @@ export default function Checkout() {
         address: fullAddress,
       };
 
-      await API.post("/orders", payload);
+      // ✅ FIX: TOKEN WAS MISSING
+      const token = localStorage.getItem("token");
+      console.log(token);
+      
+
+      await API.post("/orders", payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       toast.success("Order Placed!");
       clearCart();
